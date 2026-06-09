@@ -11,7 +11,18 @@
   const year = document.querySelector("#year");
 
   const savedTheme = localStorage.getItem("portfolio-theme");
-  const preferredTheme = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+
+  function getDefaultThemeForIST() {
+    const istHour = Number(
+      new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        hour12: false,
+        timeZone: "Asia/Kolkata"
+      }).format(new Date())
+    );
+
+    return istHour >= 6 && istHour < 18 ? "light" : "dark";
+  }
 
   function applyTheme(theme) {
     const isLight = theme === "light";
@@ -21,7 +32,7 @@
     themeText.textContent = isLight ? "Light" : "Dark";
   }
 
-  applyTheme(savedTheme || preferredTheme);
+  applyTheme(savedTheme || getDefaultThemeForIST());
 
   themeToggle.addEventListener("click", () => {
     const currentTheme = root.getAttribute("data-theme");
